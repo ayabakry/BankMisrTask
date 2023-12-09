@@ -1,14 +1,78 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from "react-router-dom";
 import "../Styling/Homepage.scss"
 import Logo from "../Imgs/BankMisr.jpg"
+import axios from "axios";
+
+
+
 function HomePage() {
     const [Convert, setConvert] = useState({
 
-        AmountInput: "",
+        AmountInput: 1,
 
     })
+    const [fromCurrency, setFromCurrency] = useState('');
+    const [toCurrency, setToCurrency] = useState('');
+    const [conversionRate, setConversionRate] = useState(null);
+    const [convertedAmount, setConvertedAmount] = useState(null);
+    const [currencies, setCurrencies] = useState([]);
+
+    useEffect(() => {
+        const fetchCurrencies = async () => {
+            try {
+                const response = await axios.get(
+                    'https://api.exchangerate-api.com/v4/latest/USD'
+                );
+                const currenciesList = Object.keys(response.data.rates);
+                setCurrencies(currenciesList);
+                // Set default currencies for the first render
+                setFromCurrency(currenciesList[0]);
+                setToCurrency(currenciesList[1]);
+            } catch (error) {
+                console.error('Error fetching currencies:', error);
+            }
+        };
+
+        fetchCurrencies();
+    }, []);
+    useEffect(() => {
+        const fetchConversionRate = async () => {
+            try {
+                const response = await axios.get(
+                    `https://api.exchangerate-api.com/v4/latest/${fromCurrency}`
+                );
+                const rate = response.data.rates[toCurrency];
+                setConversionRate(rate);
+            } catch (error) {
+                console.error('Error fetching conversion rate:', error);
+            }
+        };
+
+        fetchConversionRate();
+    }, [fromCurrency, toCurrency]);
+
+
+    useEffect(() => {
+        if (conversionRate !== null) {
+            const converted = Convert * conversionRate;
+            setConvertedAmount(converted.toFixed(2));
+        }
+    }, [Convert, conversionRate]);
+    const handleAmountChange = (e) => {
+        setConvert(e.target.value);
+    };
+
+    const handleFromCurrencyChange = (e) => {
+        setFromCurrency(e.target.value);
+    };
+
+    const handleToCurrencyChange = (e) => {
+        setToCurrency(e.target.value);
+    };
+
+
     const [errors, setErrors] = useState({
         AmountInputErr: true,
 
@@ -60,13 +124,15 @@ function HomePage() {
 
 
                 <label for="subject2" className="form-label" >Amount </label>
-                <input type="text" id="subject2" className=
+                <input type="number" id="subject2" className=
                     {`form-control ${errors.AmountInputErr ? "border-primary" : "border-primary"}`}
                     name="amountNum"
                     placeholder='Enter Your Amount'
-                    onChange={(e) => Converter(e)}
-                    value={Convert.AmountInput}
-                    style={{ margin: '0px 0px 10px 25px', width: '10%' }}>
+                    value={Convert} onChange={handleAmountChange}
+                    style={{
+                        margin: '0px 0px 10px 25px', width: '50%',
+                        height: '45px',
+                    }}>
 
                 </input>
                 <p className="text-danger">
@@ -75,27 +141,28 @@ function HomePage() {
                     {errors.AmountInput ? 'Enter Amount Only Number' : ''} </p>
 
                 <label for="subject2" className="form-label" >From  </label>
-                <select className="form-select form-select-lg mb-3" aria-label=".form-select-lg example"
-                    style={{ margin: '0px 0px 10px 25px', width: '10%' }}
-                >
-                    <option selected>EUR</option>
-                    {/* <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option> */}
+                <select className="form-select form-select-lg mb-3" aria-label=".form-select-lg example" value={fromCurrency} onChange={handleFromCurrencyChange}  style={{ margin: '0px 0px 10px 25px', width: '50%' }}>
+                    {currencies.map((currency) => (
+                        <option key={currency} value={currency}>
+                            {currency}
+                        </option>
+                    ))}
                 </select>
                 <label for="subject2" className="form-label" >To  </label>
-                <select className="form-select form-select-lg mb-3" aria-label=".form-select-lg example"
-                    style={{ margin: '0px 0px 10px 25px', width: '10%' }}
-                >
-                    <option selected>USD</option>
-                    {/* <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option> */}
-                </select>
-                <button type="button" class="btn btn-primary" disabled={!errors.AmountInputErr  ? false : true}
-                >Convert</button>
-                <input type="text" className="form-control" style={{ margin: '0px 0px 10px 25px', width: '10%' }}></input>
+                <select className="form-select form-select-lg mb-3" aria-label=".form-select-lg example" value={toCurrency} onChange={handleToCurrencyChange}       style={{ margin: '0px 0px 10px 25px', width: '50%' }}>
+          {currencies.map((currency) => (
+            <option key={currency} value={currency}>
+              {currency}
+            </option>
+          ))}
+        </select>
 
+                {/* <button type="button" class="btn btn-primary" disabled={!errors.AmountInputErr  ? false : true}
+                >Convert</button> */}
+
+                <label className="form-control" style={{ margin: '0px 0px 10px 25px', width: '50%', border: '1px solid blue' }}>{`${Convert} ${fromCurrency} = ${convertedAmount} ${toCurrency}`}</label>
+                <button type="button" class="btn btn-primary"
+                >More Details</button>
             </div>
 
             <div className="row row-cols-1 row-cols-md-3 g-4">
