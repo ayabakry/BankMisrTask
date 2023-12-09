@@ -7,7 +7,7 @@ import axios from "axios";
 
 
 
-function HomePage() {
+function Details() {
     const [Convert, setConvert] = useState({
 
         AmountInput: 1,
@@ -138,91 +138,19 @@ function HomePage() {
                 >Convert</button> */}
 
                 <label className="form-control" style={{ margin: '0px 0px 10px 25px', width: '50%', border: '1px solid blue' }}>{`${Convert} ${fromCurrency} = ${convertedAmount} ${toCurrency}`}</label>
-                <Link to='/details'>
-                <button type="button" class="btn btn-primary"
-                >More Details</button>
-                </Link>
+              
             </div>
-
             <div className="row row-cols-1 row-cols-md-3 g-4">
                 <div className="col">
                     <div className="card">
                         <div className="card-body">
-                            <h5 className="card-title">Card title</h5>
-                            <p className="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. </p>
+                            <p className="card-text"> historical data </p>
                         </div>
                     </div>
                 </div>
-
-                <div className="col">
-                    <div className="card ">
-                        <div className="card-body">
-                            <h5 className="card-title">Card title</h5>
-                            <p className="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.</p>
-                        </div>
-                    </div>
-                </div>
-                <div className="col">
-                    <div className="card ">
-                        <div className="card-body">
-                            <h5 className="card-title">Card title</h5>
-                            <p className="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. </p>
-                        </div>
-                    </div>
-                </div>
-                <div className="col">
-                    <div className="card">
-                        <div className="card-body">
-                            <h5 className="card-title">Card title</h5>
-                            <p className="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. </p>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="col">
-                    <div className="card ">
-                        <div className="card-body">
-                            <h5 className="card-title">Card title</h5>
-                            <p className="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.</p>
-                        </div>
-                    </div>
-                </div>
-                <div className="col">
-                    <div className="card ">
-                        <div className="card-body">
-                            <h5 className="card-title">Card title</h5>
-                            <p className="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. </p>
-                        </div>
-                    </div>
-                </div>
-                <div className="col">
-                    <div className="card">
-                        <div className="card-body">
-                            <h5 className="card-title">Card title</h5>
-                            <p className="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. </p>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="col">
-                    <div className="card ">
-                        <div className="card-body">
-                            <h5 className="card-title">Card title</h5>
-                            <p className="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.</p>
-                        </div>
-                    </div>
-                </div>
-                <div className="col">
-                    <div className="card ">
-                        <div className="card-body">
-                            <h5 className="card-title">Card title</h5>
-                            <p className="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+</div>
             <br></br><br></br>
         </Fragment>
     );
 }
-export default HomePage;
+export default Details;
